@@ -4,4 +4,7 @@ class Config:
     """
 
     def __init__(self, env):
-        pass
+        self.envelope_dir = env.get('ENVELOPE_DIR')
+        self.asset_dir = env.get('ASSET_DIR')
+        self.content_service_url = env.get('CONTENT_SERVICE_URL')
+        self.content_service_apikey = env.get('CONTENT_SERVICE_APIKEY')
