@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 class Config:
     """
     Load configuration values from the environment.
