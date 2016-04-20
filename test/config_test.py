@@ -1,5 +1,5 @@
 
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 from submitter.config import Config
 
 def test_valid_config():
@@ -14,3 +14,6 @@ def test_valid_config():
     assert_equal(c.asset_dir, '/assets/')
     assert_equal(c.content_service_url, 'http://localhost:9000/')
     assert_equal(c.content_service_apikey, '12341234')
+
+    assert_true(c.is_valid())
+    assert_equal(c.missing(), [])
