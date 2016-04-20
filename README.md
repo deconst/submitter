@@ -2,6 +2,8 @@
 
 .jpg / .css / .json :point_right: content service
 
+[![Docker Repository on Quay.io](https://quay.io/repository/deconst/submitter/status "Docker Repository on Quay.io")](https://quay.io/repository/deconst/submitter) [![Build Status](https://travis-ci.org/deconst/submitter.svg?branch=master)](https://travis-ci.org/deconst/submitter)
+
 Submit prepared JSON documents to the content service.
 
 ### Configuration
