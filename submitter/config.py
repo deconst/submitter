@@ -9,6 +9,9 @@ class Config:
         self.content_service_url = env.get('CONTENT_SERVICE_URL')
         self.content_service_apikey = env.get('CONTENT_SERVICE_APIKEY')
 
+        if self.content_service_url.endswith('/'):
+            self.content_service_url = self.content_service_url[:-1]
+
     def missing(self):
         m = []
         if not self.envelope_dir:
