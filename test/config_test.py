@@ -1,5 +1,5 @@
 
-from nose.tools import assert_equal, assert_true
+from nose.tools import assert_equal, assert_true, assert_false, assert_in
 from submitter.config import Config
 
 def test_valid_config():
@@ -17,3 +17,14 @@ def test_valid_config():
 
     assert_true(c.is_valid())
     assert_equal(c.missing(), [])
+
+def test_missing_value():
+    c = Config({
+        'ENVELOPE_DIR': '/envelopes/',
+        'ASSET_DIR': '',
+        'CONTENT_SERVICE_URL': 'http://localhost:9000/'
+    })
+
+    assert_false(c.is_valid())
+    assert_in('ASSET_DIR', c.missing())
+    assert_in('CONTENT_SERVICE_APIKEY', c.missing())
