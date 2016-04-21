@@ -2,6 +2,8 @@
 
 import base64
 import os
+import io
+import tarfile
 
 from betamax import Betamax
 from requests import Session
@@ -42,4 +44,24 @@ class TestContentService():
                 'foo/aaa.jpg': '/__local_asset__/aaa-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.jpg',
                 'bar/bbb.gif': None,
                 'baz/missing.css': None
+            })
+
+    def test_uploadassets(self):
+        with self.betamax.use_cassette('bulkassets'):
+            tarball = io.BytesIO()
+            tf = tarfile.open(fileobj=tarball, mode='w:gz')
+
+            entry0 = tarfile.TarInfo('bar/bbb.gif')
+            entry0.size = 0
+            tf.addfile(entry0, io.BytesIO())
+
+            entry1 = tarfile.TarInfo('foo/aaa.jpg')
+            entry1.size = 0
+            tf.addfile(entry1, io.BytesIO())
+
+            response = self.cs.bulkassets(tarball)
+
+            assert_equal(response, {
+                'bar/bbb.gif': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+                'foo/aaa.jpg': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
             })
