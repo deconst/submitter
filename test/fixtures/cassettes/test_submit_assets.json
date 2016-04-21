@@ -1,0 +1,95 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2016-04-21T18:26:49",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"bar/bbb.gif\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"foo/aaa.jpg\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"}"
+        },
+        "headers": {
+          "Accept": "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Authorization": "deconst <APIKEY>",
+          "Connection": "keep-alive",
+          "Content-Length": "166",
+          "Content-Type": "application/json",
+          "User-Agent": "submitter/0.0.0"
+        },
+        "method": "GET",
+        "uri": "http://dockerdev:9000/checkassets"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"bar/bbb.gif\":\"/__local_asset__/bbb-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gif\",\"foo/aaa.jpg\":\"/__local_asset__/aaa-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.jpg\"}"
+        },
+        "headers": {
+          "Access-Control-Allow-Headers": "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Api-Version, Response-Time",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Api-Version, Request-Id, Response-Time",
+          "Connection": "Keep-Alive",
+          "Content-Length": "213",
+          "Content-MD5": "a6JtVY64ggsXyDIulzl7vw==",
+          "Content-Type": "application/json",
+          "Date": "Thu, 21 Apr 2016 18:26:49 GMT",
+          "Request-Id": "a957c534-ff89-4a4e-ae84-aa080b35f3d6",
+          "Response-Time": "4",
+          "Server": "content-service"
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "http://dockerdev:9000/checkassets"
+      }
+    },
+    {
+      "recorded_at": "2016-04-21T18:26:49",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "\u001f\ufffd\b\u0000i\u001b\u0019W\u0002\ufffd\ufffd\ufffd\u0001\r\u0000\u0000\u0000\u00a0\ufffdOm\u000e7\ufffd\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\ufffd7\u0003\ufffd\ufffd\u001d'\u0000(\u0000\u0000"
+        },
+        "headers": {
+          "Accept": "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Authorization": "deconst <APIKEY>",
+          "Connection": "keep-alive",
+          "Content-Length": "45",
+          "Content-Type": "application/tar+gzip",
+          "User-Agent": "submitter/0.0.0"
+        },
+        "method": "POST",
+        "uri": "http://dockerdev:9000/bulkasset"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{}"
+        },
+        "headers": {
+          "Access-Control-Allow-Headers": "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Api-Version, Response-Time",
+          "Access-Control-Allow-Methods": "POST",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Api-Version, Request-Id, Response-Time",
+          "Connection": "Keep-Alive",
+          "Content-Length": "2",
+          "Content-MD5": "mZFLkyvTelC5g8XnyQrpOw==",
+          "Content-Type": "application/json",
+          "Date": "Thu, 21 Apr 2016 18:26:49 GMT",
+          "Request-Id": "7499c153-fe55-4dc4-97b3-ddebf3e2890d",
+          "Response-Time": "4",
+          "Server": "content-service"
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "http://dockerdev:9000/bulkasset"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.6.0"
+}
