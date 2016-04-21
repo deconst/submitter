@@ -67,6 +67,23 @@ class AssetSet():
 
         return {a.localpath: a.fingerprint for a in self.assets}
 
+    def accept_check(self, response):
+        """
+        Update Asset states with the response of a /checkassets query.
+        """
+
+        for asset in self.assets:
+            asset.accept_check(response)
+
+    def to_upload(self):
+        """
+        Generate each Asset that must be uploaded to the content service.
+        """
+
+        for asset in self.assets:
+            if asset.needs_upload():
+                yield asset
+
     def __len__(self):
         return len(self.assets)
 

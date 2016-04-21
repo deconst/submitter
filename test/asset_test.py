@@ -3,7 +3,7 @@
 import io
 
 from nose.tools import assert_equal, assert_is, assert_is_none, assert_false, \
-    assert_true
+    assert_true, assert_in, assert_not_in
 from submitter.asset import Asset, AssetSet
 
 class TestAsset():
@@ -58,3 +58,17 @@ class TestAssetSet():
             'kittens.gif': '02ed10d61a9efd82184b8b4ebf6f34cffddf0e02ae89b6029e7a4edc7bbdb6ff'
         }
         assert_equal(actual_query, expected_query)
+
+    def test_to_upload(self):
+        asset_set = AssetSet()
+        asset_set.append(self.asset0)
+        asset_set.append(self.asset1)
+
+        asset_set.accept_check({
+            'local/image.jpg': 'https://cdn.horse/image-0ce34a6c.jpg',
+            'kittens.gif': None
+        })
+
+        to_upload = [a for a in asset_set.to_upload()]
+        assert_not_in(self.asset0, to_upload)
+        assert_in(self.asset1, to_upload)
