@@ -84,6 +84,14 @@ class AssetSet():
             if asset.needs_upload():
                 yield asset
 
+    def all(self):
+        """
+        Generate all Assets.
+        """
+
+        for asset in self.assets:
+            yield asset
+
     def __len__(self):
         return len(self.assets)
 
