@@ -26,6 +26,11 @@ class TestContentService():
         self.cs = ContentService(url=URL, apikey=APIKEY, session=session)
 
     def test_checkassets(self):
+        # curl -X POST -H "Authorization: deconst ${APIKEY}" \
+        #   http://dockerdev:9000/assets \
+        #   -F aaa=@test/fixtures/assets/foo/aaa.jpg \
+        #   -F bbb=@test/fixtures/assets/bar/bbb.gif
+
         with self.betamax.use_cassette('checkassets'):
             response = self.cs.checkassets({
                 'foo/aaa.jpg': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
