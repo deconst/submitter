@@ -16,10 +16,10 @@ class ContentService():
         if not self.session:
             self.session = Session()
 
-        self.session.auth = ('deconst', apikey)
         self.session.headers.update({
             'Accept': 'application/json',
-            'User-Agent': 'submitter/0.0.0'
+            'User-Agent': 'submitter/0.0.0',
+            'Authorization': 'deconst {}'.format(apikey)
         })
 
     def checkassets(self, query):
