@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import hashlib
 import json
 from os.path import basename, splitext
 from urllib.parse import unquote
@@ -12,6 +13,10 @@ class Envelope():
     def __init__(self, fname, stream):
         self.fname = fname
         self.document = json.load(stream)
+        self.upload_needed = True
+
+    def needs_upload(self):
+        return self.upload_needed
 
     def encoded_content_id(self):
         return splitext(basename(self.fname))[0]
@@ -54,3 +59,11 @@ class Envelope():
 
         self.document['body'] = processed
         del self.document['asset_offsets']
+
+    def fingerprint(self):
+        """
+        Compute the SHA256 checksum of a stable representation of this envelope.
+        """
+
+        stable = json.dumps(self.document, separators=(',', ':'), sort_keys=True)
+        return hashlib.sha256(stable.encode('utf-8')).hexdigest()

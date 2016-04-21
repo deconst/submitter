@@ -55,3 +55,23 @@ class TestEnvelope():
             'https://assets.horse/one-111.jpg are ' \
             'https://assets.horse/three-333.png some ' \
             'assets https://assets.horse/one-111.jpg</p>')
+
+    def test_fingerprint(self):
+        a = Asset('local/one.jpg', io.BytesIO())
+        asset_set = AssetSet()
+        asset_set.append(a)
+        asset_set.accept_urls({
+            'local/one.jpg': 'https://assets.horse/one-111.jpg'
+        })
+
+        data = io.StringIO('''{
+            "title": "another asset envelope",
+            "body": "<p>The asset URL is X</p>",
+            "asset_offsets": { "local/one.jpg": [20] }
+        }''')
+        e = Envelope('https%3A%2F%2Fgithub.com%2Forg%2Frepo%2Fpage.json', data)
+
+        e.apply_asset_offsets(asset_set)
+
+        # echo -n '{"body":"<p>The asset URL is https://assets.horse/one-111.jpg</p>","title":"another asset envelope"}' | shasum -a 256
+        assert_equal(e.fingerprint(), 'a0e0c4043590530b1d911432c04fc4d238c614b60eeaa9b68632d0791ba96aec')
