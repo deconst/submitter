@@ -10,6 +10,22 @@ class Asset():
     def __init__(self, localpath, stream):
         self.localpath = localpath
         self.fingerprint = hashlib.sha256(stream.read()).hexdigest()
+        self.public_url = None
+
+    def needs_upload(self):
+        """
+        Return true if this asset should be included within the asset tarball.
+        """
+
+        return self.public_url is None
+
+    def accept_check(self, check_result):
+        """
+        Update this asset's state with the response from a /checkassets
+        query.
+        """
+
+        self.public_url = check_result[self.localpath]
 
 class AssetSet():
     """
