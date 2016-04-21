@@ -1,1 +1,50 @@
-{"http_interactions": [{"request": {"headers": {"User-Agent": "submitter/0.0.0", "Connection": "keep-alive", "Authorization": "deconst <APIKEY>", "Accept-Encoding": "gzip, deflate", "Accept": "application/json", "Content-Type": "application/json", "Content-Length": "253"}, "method": "GET", "uri": "http://dockerdev:9000/checkassets", "body": {"encoding": "utf-8", "string": "{\"foo/aaa.jpg\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"bar/bbb.gif\": \"8810ad581e59f2bc3928b261707a71308f7e139eb04820366dc4d5c18d980225\", \"baz/missing.css\": \"ffa63583dfa6706b87d284b86b0d693a161e4840aad2c5cf6b5d27c3b9621f7d\"}"}}, "response": {"headers": {"Access-Control-Allow-Methods": "GET", "Connection": "Keep-Alive", "Content-MD5": "oir6+RvXZjHUtl/GwYOXww==", "Content-Type": "application/json", "Response-Time": "3", "Access-Control-Expose-Headers": "Api-Version, Request-Id, Response-Time", "Request-Id": "a5f53c52-2c3a-4a3d-aeae-4c59520a2d06", "Content-Length": "149", "Server": "content-service", "Date": "Thu, 21 Apr 2016 17:11:13 GMT", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Api-Version, Response-Time"}, "status": {"code": 200, "message": "OK"}, "body": {"encoding": null, "string": "{\"foo/aaa.jpg\":\"/__local_asset__/aaa-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.jpg\",\"bar/bbb.gif\":null,\"baz/missing.css\":null}"}, "url": "http://dockerdev:9000/checkassets"}, "recorded_at": "2016-04-21T17:11:13"}], "recorded_with": "betamax/0.6.0"}
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2016-04-21T17:29:51",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"baz/missing.css\": \"ffa63583dfa6706b87d284b86b0d693a161e4840aad2c5cf6b5d27c3b9621f7d\", \"foo/aaa.jpg\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"bar/bbb.gif\": \"8810ad581e59f2bc3928b261707a71308f7e139eb04820366dc4d5c18d980225\"}"
+        },
+        "headers": {
+          "Accept": "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Authorization": "deconst <APIKEY>",
+          "Connection": "keep-alive",
+          "Content-Length": "253",
+          "Content-Type": "application/json",
+          "User-Agent": "submitter/0.0.0"
+        },
+        "method": "GET",
+        "uri": "http://dockerdev:9000/checkassets"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"baz/missing.css\":null,\"foo/aaa.jpg\":\"/__local_asset__/aaa-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.jpg\",\"bar/bbb.gif\":null}"
+        },
+        "headers": {
+          "Access-Control-Allow-Headers": "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Api-Version, Response-Time",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Api-Version, Request-Id, Response-Time",
+          "Connection": "Keep-Alive",
+          "Content-Length": "149",
+          "Content-MD5": "GcNnplSZae6eJnt8ICMSIw==",
+          "Content-Type": "application/json",
+          "Date": "Thu, 21 Apr 2016 17:29:51 GMT",
+          "Request-Id": "5192869b-3392-4c9c-b586-c934206241f3",
+          "Response-Time": "4",
+          "Server": "content-service"
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "http://dockerdev:9000/checkassets"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.6.0"
+}
