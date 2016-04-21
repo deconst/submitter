@@ -27,6 +27,25 @@ class Asset():
 
         self.public_url = check_result[self.localpath]
 
+    def __repr__(self):
+        return '{}(localpath={},fingerprint={},public_url={})'.format(
+            self.__class__.__name__,
+            self.localpath,
+            self.fingerprint,
+            self.public_url
+        )
+
+    def __str__(self):
+        upload_mark = ''
+        if self.needs_upload():
+            upload_mark = ': *'
+
+        return '{}({}{})'.format(
+            self.__class__.__name__,
+            self.localpath,
+            upload_mark
+        )
+
 class AssetSet():
     """
     The collection of all assets discovered within the asset directory.
@@ -50,3 +69,9 @@ class AssetSet():
 
     def __len__(self):
         return len(self.assets)
+
+    def __repr__(self):
+        return '{}(assets={})'.format(self.__class__.__name__, self.assets)
+
+    def __str__(self):
+        return '{}(assets x{})'.format(self.__class__.__name__, len(self))
