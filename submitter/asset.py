@@ -57,10 +57,10 @@ class AssetSet():
     """
 
     def __init__(self):
-        self.assets = []
+        self.assets = {}
 
     def append(self, asset):
-        self.assets.append(asset)
+        self.assets[asset.localpath] = asset
 
     def fingerprint_query(self):
         """
@@ -70,14 +70,14 @@ class AssetSet():
         https://github.com/deconst/content-service#get-checkassets
         """
 
-        return {a.localpath: a.fingerprint for a in self.assets}
+        return {localpath: a.fingerprint for localpath, a in self.assets.items()}
 
     def accept_urls(self, response):
         """
         Update Asset states with the response of a /checkassets query.
         """
 
-        for asset in self.assets:
+        for asset in self.all():
             asset.accept_url(response)
 
     def to_upload(self):
@@ -85,7 +85,7 @@ class AssetSet():
         Generate each Asset that must be uploaded to the content service.
         """
 
-        for asset in self.assets:
+        for asset in self.all():
             if asset.needs_upload():
                 yield asset
 
@@ -94,7 +94,7 @@ class AssetSet():
         Generate all Assets.
         """
 
-        for asset in self.assets:
+        for asset in self.assets.values():
             yield asset
 
     def all_public(self):
@@ -104,6 +104,9 @@ class AssetSet():
 
         exhausted = object()
         return next(self.to_upload(), exhausted) is exhausted
+
+    def __getitem__(self, localpath):
+        return self.assets[localpath]
 
     def __len__(self):
         return len(self.assets)
