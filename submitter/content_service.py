@@ -36,3 +36,18 @@ class ContentService():
         })
         r.raise_for_status()
         return r.json()
+
+    def bulkasset(self, tarball):
+        """
+        Bulk-upload a binary buffer containing multiple assets within a
+        .tar.gz file.
+
+        https://github.com/deconst/content-service#post-bulkassets
+        """
+
+        u = self.base_url + '/bulkasset'
+        r = self.session.post(u, data=tarball, headers={
+            'Content-Type': 'application/tar+gzip'
+        })
+        r.raise_for_status()
+        return r.json()

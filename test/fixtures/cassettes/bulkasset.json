@@ -1,0 +1,50 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2016-04-21T17:29:51",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "\u001f\ufffd\b\u0000\u000f\u000e\u0019W\u0002\ufffd\ufffd\ufffd1\n\ufffd@\u0014\u0004\ufffd=\u029e \ufffd\ufffdx\ufffd\ufffdE\ufffdi\"Q\ufffd\ufffdb%\nV*\n\ufffd53\ufffd05\u05be\ufffd\ufffdM\ufffd1}\ufffd\ufffd\ufffdK\ufffde\ufffd\ufffd}\ufffd\ufffdR\u001e\ufffd\u0017\\N\ufffdXs~\ufffd\ufffd\ufffdq\u007fb\\\ufffd>\"\ufffd\ufffd8\ufffd\ufffd\ufffde\ufffd\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\ufffdW\ufffd\ufffd\u000fS\u001e\u0000(\u0000\u0000"
+        },
+        "headers": {
+          "Accept": "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Authorization": "deconst <APIKEY>",
+          "Connection": "keep-alive",
+          "Content-Length": "115",
+          "Content-Type": "application/tar+gzip",
+          "User-Agent": "submitter/0.0.0"
+        },
+        "method": "POST",
+        "uri": "http://dockerdev:9000/bulkasset"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"bar/bbb.gif\":\"/__local_asset__/bbb-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gif\",\"foo/aaa.jpg\":\"/__local_asset__/aaa-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.jpg\"}"
+        },
+        "headers": {
+          "Access-Control-Allow-Headers": "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Api-Version, Response-Time",
+          "Access-Control-Allow-Methods": "POST",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Api-Version, Request-Id, Response-Time",
+          "Connection": "Keep-Alive",
+          "Content-Length": "213",
+          "Content-MD5": "a6JtVY64ggsXyDIulzl7vw==",
+          "Content-Type": "application/json",
+          "Date": "Thu, 21 Apr 2016 17:29:51 GMT",
+          "Request-Id": "cacb3a74-a212-4ceb-a8be-d40d4a42d8dc",
+          "Response-Time": "11",
+          "Server": "content-service"
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "http://dockerdev:9000/bulkasset"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.6.0"
+}

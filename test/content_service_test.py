@@ -46,8 +46,8 @@ class TestContentService():
                 'baz/missing.css': None
             })
 
-    def test_uploadassets(self):
-        with self.betamax.use_cassette('bulkassets'):
+    def test_bulkasset(self):
+        with self.betamax.use_cassette('bulkasset'):
             tarball = io.BytesIO()
             tf = tarfile.open(fileobj=tarball, mode='w:gz')
 
@@ -59,9 +59,11 @@ class TestContentService():
             entry1.size = 0
             tf.addfile(entry1, io.BytesIO())
 
-            response = self.cs.bulkassets(tarball)
+            tf.close()
+
+            response = self.cs.bulkasset(tarball.getvalue())
 
             assert_equal(response, {
-                'bar/bbb.gif': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-                'foo/aaa.jpg': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+                'bar/bbb.gif': '/__local_asset__/bbb-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gif',
+                'foo/aaa.jpg': '/__local_asset__/aaa-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.jpg'
             })
