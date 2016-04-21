@@ -19,13 +19,18 @@ class Asset():
 
         return self.public_url is None
 
-    def accept_check(self, check_result):
+    def accept_url(self, response):
         """
         Update this asset's state with the response from a /checkassets
-        query.
+        query or a /bulkasset call.
         """
 
-        self.public_url = check_result[self.localpath]
+        if not self.public_url:
+            self.public_url = response[self.localpath]
+        else:
+            if self.localpath in self.public_url:
+                msg = 'Unexpected public URL for asset {}'.format(self.localpath)
+                raise Exception(msg)
 
     def __repr__(self):
         return '{}(localpath={},fingerprint={},public_url={})'.format(
@@ -67,13 +72,13 @@ class AssetSet():
 
         return {a.localpath: a.fingerprint for a in self.assets}
 
-    def accept_check(self, response):
+    def accept_urls(self, response):
         """
         Update Asset states with the response of a /checkassets query.
         """
 
         for asset in self.assets:
-            asset.accept_check(response)
+            asset.accept_url(response)
 
     def to_upload(self):
         """

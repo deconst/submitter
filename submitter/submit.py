@@ -26,7 +26,7 @@ def submit_assets(directory, content_service):
                 asset_set.append(asset)
 
     check_result = content_service.checkassets(asset_set.fingerprint_query())
-    asset_set.accept_check(check_result)
+    asset_set.accept_urls(check_result)
 
     asset_archive = io.BytesIO()
     tf = tarfile.open(fileobj=asset_archive, mode='w:gz')
@@ -35,5 +35,7 @@ def submit_assets(directory, content_service):
         tf.add(fullpath, arcname=asset.localpath)
     tf.close()
 
-    asset_result = content_service.bulkasset(asset_archive.getvalue())
+    upload_result = content_service.bulkasset(asset_archive.getvalue())
+    asset_set.accept_urls(upload_result)
+
     return asset_set

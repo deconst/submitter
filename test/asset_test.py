@@ -22,7 +22,7 @@ class TestAsset():
         assert_is_none(asset.public_url)
         assert_true(asset.needs_upload())
 
-        asset.accept_check({
+        asset.accept_url({
             'local/image.jpg': 'https://cdn.horse/image-0ce34a6c.jpg'
         })
 
@@ -64,7 +64,7 @@ class TestAssetSet():
         asset_set.append(self.asset0)
         asset_set.append(self.asset1)
 
-        asset_set.accept_check({
+        asset_set.accept_urls({
             'local/image.jpg': 'https://cdn.horse/image-0ce34a6c.jpg',
             'kittens.gif': None
         })
