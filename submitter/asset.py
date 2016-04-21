@@ -97,6 +97,14 @@ class AssetSet():
         for asset in self.assets:
             yield asset
 
+    def all_public(self):
+        """
+        Return True if all assets have been assigned public URLs.
+        """
+
+        exhausted = object()
+        return next(self.to_upload(), exhausted) is exhausted
+
     def __len__(self):
         return len(self.assets)
 
