@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import base64
 import os
 
 from betamax import Betamax
@@ -13,7 +14,9 @@ APIKEY = os.environ.get('CONTENT_SERVICE_APIKEY', '12341234')
 
 with Betamax.configure() as config:
     config.cassette_library_dir = 'test/fixtures/cassettes'
-    config.define_cassette_placeholder('<APIKEY>', APIKEY)
+
+    encoded_auth = base64.b64encode("deconst:{}".format(APIKEY).encode('utf-8'))
+    config.define_cassette_placeholder('<APIKEY>', encoded_auth.decode('utf-8'))
 
 class TestContentService():
 
