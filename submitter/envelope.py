@@ -99,6 +99,13 @@ class EnvelopeSet():
         for e in self.envelopes:
             yield e
 
+    def fingerprint_query(self):
+        """
+        Construct a query map of content IDs to normalized envelope fingerprints.
+        """
+
+        return {e.content_id(): e.fingerprint() for e in self.all()}
+
     def accept_presence(self, response):
         for envelope in self.all():
             envelope.accept_presence(response)

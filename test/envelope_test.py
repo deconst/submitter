@@ -111,6 +111,12 @@ class TestEnvelopeSet():
         self.envelope_set.append(self.e1)
         assert_equal(len(self.envelope_set), 2)
 
+    def test_fingerprint_query(self):
+        assert_equal(self.envelope_set.fingerprint_query(), {
+            'https://g.com/a/b/one': '842d36ad29589a39fc4be06157c5c204a360f98981fc905c0b2a114662172bd8',
+            'https://g.com/a/b/two': 'b00e03c4da0d9ce6b65ae32a384c4cbb893bc13e2c05817b411128f8e118fe0b'
+        })
+
     def test_accept_presence(self):
         self.envelope_set.accept_presence({
             'https://g.com/a/b/one': True,
