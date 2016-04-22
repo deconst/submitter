@@ -2,6 +2,6 @@
   "title": "three",
   "body": "<p>Three X uses the same asset X twice</p>",
   "asset_offsets": {
-    "foo/aaa.jpg": [9, 31],
+    "foo/aaa.jpg": [9, 31]
   }
 }
