@@ -78,17 +78,23 @@ class TestEnvelope():
 
 class TestEnvelopeSet():
 
-    def test_append(self):
-        envelope_set = EnvelopeSet()
-
-        e0 = Envelope('https://g.com/a/b/one.json', io.StringIO(
+    def setup(self):
+        self.envelope_set = EnvelopeSet()
+        self.e0 = Envelope('https://g.com/a/b/one.json', io.StringIO(
             '{"title": "one", "body": "one"}'
         ))
-        envelope_set.append(e0)
-        assert_equal(len(envelope_set), 1)
-
-        e1 = Envelope('https://g.com/a/b/two.json', io.StringIO(
+        self.e1 = Envelope('https://g.com/a/b/two.json', io.StringIO(
             '{"title": "two", "body": "two"}'
         ))
-        envelope_set.append(e1)
-        assert_equal(len(envelope_set), 2)
+
+        self.envelope_set.append(self.e0)
+        self.envelope_set.append(self.e1)
+
+    def test_append(self):
+        self.envelope_set = EnvelopeSet()
+
+        self.envelope_set.append(self.e0)
+        assert_equal(len(self.envelope_set), 1)
+
+        self.envelope_set.append(self.e1)
+        assert_equal(len(self.envelope_set), 2)
