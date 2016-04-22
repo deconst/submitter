@@ -1,0 +1,50 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2016-04-22T12:36:38",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"https://github.com/org/repo/one\": \"842d36ad29589a39fc4be06157c5c204a360f98981fc905c0b2a114662172bd8\", \"https://github.com/org/repo/two\": \"f0e62392fc00c71ba3118c91b97c6f2cbfdcd75e8053fe2d9f029ebfcf6c23fe\"}"
+        },
+        "headers": {
+          "Accept": "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Authorization": "deconst <APIKEY>",
+          "Connection": "keep-alive",
+          "Content-Length": "206",
+          "Content-Type": "application/json",
+          "User-Agent": "submitter/0.0.0"
+        },
+        "method": "GET",
+        "uri": "http://dockerdev:9000/checkcontent"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"https://github.com/org/repo/one\":true,\"https://github.com/org/repo/two\":false}"
+        },
+        "headers": {
+          "Access-Control-Allow-Headers": "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Api-Version, Response-Time",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Api-Version, Request-Id, Response-Time",
+          "Connection": "Keep-Alive",
+          "Content-Length": "80",
+          "Content-MD5": "pvsdqJHmyxtRqYdKtfGjbA==",
+          "Content-Type": "application/json",
+          "Date": "Fri, 22 Apr 2016 12:36:38 GMT",
+          "Request-Id": "648f7ede-7fee-4aec-9529-a4b9b227d890",
+          "Response-Time": "2",
+          "Server": "content-service"
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "http://dockerdev:9000/checkcontent"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.6.0"
+}

@@ -1,0 +1,7 @@
+{
+  "title": "one",
+  "body": "<p>This is one here's an asset X</p>",
+  "asset_offsets": {
+    "foo/aaa.jpg": [31]
+  }
+}

@@ -10,9 +10,13 @@ class Config:
         self.asset_dir = env.get('ASSET_DIR')
         self.content_service_url = env.get('CONTENT_SERVICE_URL')
         self.content_service_apikey = env.get('CONTENT_SERVICE_APIKEY')
+        self.content_id_base = env.get('CONTENT_ID_BASE')
 
         if self.content_service_url.endswith('/'):
             self.content_service_url = self.content_service_url[:-1]
+
+        if self.content_id_base and not self.content_id_base.endswith('/'):
+            self.content_id_base += '/'
 
     def missing(self):
         m = []
@@ -24,6 +28,8 @@ class Config:
             m.append('CONTENT_SERVICE_URL')
         if not self.content_service_apikey:
             m.append('CONTENT_SERVICE_APIKEY')
+        if not self.content_id_base:
+            m.append('CONTENT_ID_BASE')
         return m
 
     def is_valid(self):

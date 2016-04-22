@@ -1,0 +1,50 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2016-04-22T12:56:53",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "\u001f\ufffd\b\u0000\ufffd\u001f\u001aW\u0002\ufffd\ufffd\ufffd\ufffd\n\ufffd0\u0014\ufffd\ufffd=\ufffd\f\ufffd\u000b\ufffd)\u0006\ufffdu\ufffd{d\ufffd\u001a\ufffdD'\u0011\u047bw\ufffd\ufffd\ufffd*\n\u0004\ufffd\ufffdc\ufffd\ufffd\ufffdb0\u000e_\ufffd\\\ufffd\ufffd\ufffd\ufffd_\ufffd\ufffd\ufffd\u0295}\u0016\ufffd\ufffdI\u001a\ufffd\u0016\ufffd\ufffdyc\ufffd\ufffd\u0383Cgk\ufffd\u0005#\ufffd8~T1\ufffd\ufffdD\ufffd\ufffd<\u0707\ufffd0\n\ufffdg\ufffd\u0004\ufffd\ufffdm[\ufffd\ufffd\ufffd\ufffd\ufffd\ufffdf\ufffd3\ufffd\ufffd\u8d56\u0001\ufffdv\ufffd;\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\u000f\ufffd\ufffd\ufffdv\ufffd\ufffd'\ufffd\u007f\ufffd\ufffd\u02c0\ufffd\ufffd?t\ufffd\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000`\u0006\ufffd3\ufffd\ufffd\ufffd\u0000(\u0000\u0000"
+        },
+        "headers": {
+          "Accept": "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Authorization": "deconst <APIKEY>",
+          "Connection": "keep-alive",
+          "Content-Length": "185",
+          "Content-Type": "application/tar+gzip",
+          "User-Agent": "submitter/0.0.0"
+        },
+        "method": "POST",
+        "uri": "http://dockerdev:9000/bulkcontent"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"accepted\":2,\"failed\":0,\"deleted\":0}"
+        },
+        "headers": {
+          "Access-Control-Allow-Headers": "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Api-Version, Response-Time",
+          "Access-Control-Allow-Methods": "POST",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Api-Version, Request-Id, Response-Time",
+          "Connection": "Keep-Alive",
+          "Content-Length": "37",
+          "Content-MD5": "XzTH1e6XZv8akhGboeUUnw==",
+          "Content-Type": "application/json",
+          "Date": "Fri, 22 Apr 2016 12:56:53 GMT",
+          "Request-Id": "420ea5a3-ba93-46e9-a91e-897f3286749b",
+          "Response-Time": "25",
+          "Server": "content-service"
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "http://dockerdev:9000/bulkcontent"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.6.0"
+}

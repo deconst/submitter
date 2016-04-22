@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import io
+import json
 import os
 import tarfile
 from os.path import join, relpath
 
 from .asset import Asset, AssetSet
+from .envelope import Envelope, EnvelopeSet
 
 def submit_assets(directory, content_service):
     """
@@ -39,3 +41,66 @@ def submit_assets(directory, content_service):
     asset_set.accept_urls(upload_result)
 
     return asset_set
+
+def submit_envelopes(config, directory, asset_set, content_service):
+    """
+    Enumerate metadata envelopes within "directory". Inject asset public URLs
+    into each, then compute a fingerprint based on a stable representation
+    of the modified JSON documents. Query the content service to determine
+    which envelopes are already present on the content service. Construct
+    a tarball containing the rest and perform a bulk upload of the missing
+    envelopes.
+    """
+
+    envelope_set = EnvelopeSet()
+
+    for entry in os.scandir(directory):
+        if entry.is_dir():
+            # TODO Output a warning
+            continue
+
+        if not entry.name.endswith(".json"):
+            continue
+
+        with open(entry.path, 'r') as ef:
+            envelope = Envelope(entry.path, ef)
+            envelope_set.append(envelope)
+
+    envelope_set.apply_asset_offsets(asset_set)
+
+    check_response = content_service.checkcontent(envelope_set.fingerprint_query())
+    envelope_set.accept_presence(check_response)
+
+    envelope_archive = io.BytesIO()
+    tf = tarfile.open(fileobj=envelope_archive, mode='w:gz')
+
+    # Metadata entry: metadata/config.json
+    config = { 'contentIDBase': config.content_id_base }
+    config_data = json.dumps(config).encode('utf-8')
+    config_entry = tarfile.TarInfo('metadata/config.json')
+    config_entry.size = len(config_data)
+    tf.addfile(config_entry, io.BytesIO(config_data))
+
+    # Metadata entry: metadata/keep.json
+    keep = { 'keep': [e.content_id() for e in envelope_set.to_keep()] }
+    keep_data = json.dumps(keep).encode('utf-8')
+    keep_entry = tarfile.TarInfo('metadata/keep.json')
+    keep_entry.size = len(keep_data)
+    tf.addfile(keep_entry, io.BytesIO(keep_data))
+
+    # Uploaded envelopes themselves
+    for envelope in envelope_set.to_upload():
+        envelope_path = relpath(envelope.fname, directory)
+        envelope_entry = tarfile.TarInfo(envelope_path)
+        envelope_buffer = envelope.serialize().encode('utf-8')
+        envelope_entry.size = len(envelope_buffer)
+        tf.addfile(envelope_entry, io.BytesIO(envelope_buffer))
+
+    tf.close()
+
+    upload_response = content_service.bulkcontent(envelope_archive.getvalue())
+    failed = upload_response['failed']
+    if failed > 0:
+        raise Exception('Failed to upload {} envelopes.'.format(failed))
+
+    return envelope_set

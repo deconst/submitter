@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 
+import io
+
 from betamax import Betamax
 from requests import Session
 from nose.tools import assert_is_not_none, assert_equal, assert_true
 
 from . import URL, APIKEY
+from submitter.config import Config
+from submitter.asset import AssetSet, Asset
 from submitter.content_service import ContentService
-from submitter.submit import submit_assets
+from submitter.submit import submit_assets, submit_envelopes
 
 class TestSubmit():
 
@@ -33,3 +37,40 @@ class TestSubmit():
 
             assert_equal(aaa.public_url, '/__local_asset__/aaa-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.jpg')
             assert_equal(bbb.public_url, '/__local_asset__/bbb-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gif')
+
+    def test_submit_envelopes(self):
+        with self.betamax.use_cassette('test_submit_envelopes'):
+            config = Config({
+                'ENVELOPE_DIR': 'test/fixtures/envelopes/',
+                'ASSET_DIR': 'test/fixtures/assets/',
+                'CONTENT_SERVICE_URL': URL,
+                'CONTENT_SERVICE_APIKEY': APIKEY,
+                'CONTENT_ID_BASE': 'https://github.com/org/repo/'
+            })
+            assert_true(config.is_valid())
+
+            asset_set = AssetSet()
+            asset_set.append(Asset('foo/aaa.jpg', io.BytesIO()))
+            asset_set.append(Asset('bar/bbb.gif', io.BytesIO()))
+
+            asset_set.accept_urls({
+                'foo/aaa.jpg': '/__local_asset__/aaa-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.jpg',
+                'bar/bbb.gif': '/__local_asset__/bbb-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gif'
+            })
+
+            envelope_set = submit_envelopes(config, 'test/fixtures/envelopes', asset_set, self.cs)
+
+            one, two, three = None, None, None
+            for envelope in envelope_set.all():
+                if envelope.content_id() == 'https://github.com/org/repo/one':
+                    one = envelope
+                elif envelope.content_id() == 'https://github.com/org/repo/two':
+                    two = envelope
+                elif envelope.content_id() == 'https://github.com/org/repo/three':
+                    three = envelope
+                else:
+                    assert_true(False, 'Unrecognized envelope: {}'.format(envelope.content_id()))
+
+            assert_is_not_none(one)
+            assert_is_not_none(two)
+            assert_is_not_none(three)
