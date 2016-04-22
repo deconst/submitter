@@ -14,3 +14,4 @@ All environment variables must be specified.
 * `ASSET_DIR` Root of a directory tree containing assets to be uploaded.
 * `CONTENT_SERVICE_URL` Root URL of the content service.
 * `CONTENT_SERVICE_APIKEY` Valid API key for the content service, issued by an administrator.
+* `CONTENT_ID_BASE` Content ID prefix common to the envelopes found in the envelope directory.
