@@ -11,6 +11,7 @@ class Config:
         self.content_service_url = env.get('CONTENT_SERVICE_URL')
         self.content_service_apikey = env.get('CONTENT_SERVICE_APIKEY')
         self.content_id_base = env.get('CONTENT_ID_BASE')
+        self.verbose = env.get('VERBOSE') is not None
 
         if self.content_service_url.endswith('/'):
             self.content_service_url = self.content_service_url[:-1]

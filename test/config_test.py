@@ -9,7 +9,8 @@ def test_valid_config():
         'ASSET_DIR': '/assets/',
         'CONTENT_SERVICE_URL': 'http://localhost:9000',
         'CONTENT_SERVICE_APIKEY': '12341234',
-        'CONTENT_ID_BASE': 'https://github.com/org/repo/'
+        'CONTENT_ID_BASE': 'https://github.com/org/repo/',
+        'VERBOSE': 'true'
     })
 
     assert_equal(c.envelope_dir, '/envelopes/')
@@ -17,6 +18,7 @@ def test_valid_config():
     assert_equal(c.content_service_url, 'http://localhost:9000')
     assert_equal(c.content_service_apikey, '12341234')
     assert_equal(c.content_id_base, 'https://github.com/org/repo/')
+    assert_true(c.verbose)
 
     assert_true(c.is_valid())
     assert_equal(c.missing(), [])
@@ -54,3 +56,14 @@ def test_normalize_id_base():
     })
 
     assert_equal(c.content_id_base, 'https://github.com/org/repo/')
+
+def test_verbose_defaults_to_false():
+    c = Config({
+        'ENVELOPE_DIR': '/envelopes/',
+        'ASSET_DIR': '/assets/',
+        'CONTENT_SERVICE_APIKEY': '12341234',
+        'CONTENT_SERVICE_URL': 'http://localhost:9000',
+        'CONTENT_ID_BASE': 'https://github.com/org/repo'
+    })
+
+    assert_false(c.verbose)
