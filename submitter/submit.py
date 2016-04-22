@@ -150,7 +150,7 @@ def submit_envelopes(config, directory, asset_set, content_service):
         tf.addfile(envelope_entry, io.BytesIO(envelope_buffer))
 
     tf.close()
-    logging.debug('Created tarball containing {} envelopes in {}.'.format(uploaded, datetime.utcnow() - ts)
+    logging.debug('Created tarball containing {} envelopes in {}.'.format(uploaded, datetime.utcnow() - ts))
 
     upload_response = content_service.bulkcontent(envelope_archive.getvalue())
 
