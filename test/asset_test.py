@@ -90,3 +90,16 @@ class TestAssetSet():
             'kittens.gif': 'https://cdn.horse/kittens-02ed10d6.gif'
         })
         assert_true(asset_set.all_public())
+
+    def test_partial_url_responses(self):
+        asset_set = AssetSet()
+        asset_set.append(self.asset0)
+        asset_set.append(self.asset1)
+
+        asset_set.accept_urls({
+            'local/image.jpg': 'https://cdn.horse/image-0ce34a6c.jpg'
+        })
+
+        to_upload = [a for a in asset_set.to_upload()]
+        assert_not_in(self.asset0, to_upload)
+        assert_in(self.asset1, to_upload)

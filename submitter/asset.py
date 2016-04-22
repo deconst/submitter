@@ -26,7 +26,7 @@ class Asset():
         """
 
         if not self.public_url:
-            self.public_url = response[self.localpath]
+            self.public_url = response.get(self.localpath)
         else:
             if self.localpath in self.public_url:
                 msg = 'Unexpected public URL for asset {}'.format(self.localpath)
