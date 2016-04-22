@@ -79,6 +79,25 @@ class Envelope():
         stable = json.dumps(self.document, separators=(',', ':'), sort_keys=True)
         return hashlib.sha256(stable.encode('utf-8')).hexdigest()
 
+    def __repr__(self):
+        return '{}(fname={},document={},upload_needed={})'.format(
+            self.__class__.__name__,
+            self.fname,
+            self.document,
+            self.upload_needed
+        )
+
+    def __str__(self):
+        upload_mark = ''
+        if self.needs_upload():
+            upload_mark = ': *'
+
+        return '{}({}{})'.format(
+            self.__class__.__name__,
+            self.content_id(),
+            upload_mark
+        )
+
 
 class EnvelopeSet():
     """
@@ -132,3 +151,9 @@ class EnvelopeSet():
 
     def __len__(self):
         return len(self.envelopes)
+
+    def __repr__(self):
+        return '{}(envelopes={})'.format(self.__class__.__name__, self.envelopes)
+
+    def __str__(self):
+        return '{}(envelopes x{})'.format(self.__class__.__name__, len(self))
