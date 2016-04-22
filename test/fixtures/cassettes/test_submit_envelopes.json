@@ -1,0 +1,95 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2016-04-22T14:45:10",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"https://github.com/org/repo/three\": \"669cbcb84005e73e8bbef1ad59655948422843426d4ab36b6ba7439db5a44bcc\", \"https://github.com/org/repo/one\": \"d30228ae5d06eeda45087035b7a84ceb20d83ad7ceafea3eb023a63068b88ea8\", \"https://github.com/org/repo/two\": \"372d06da50365f8626d2fef5bf1322cbdd50633cccce08bc72ace7614b2f92b6\"}"
+        },
+        "headers": {
+          "Accept": "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Authorization": "deconst <APIKEY>",
+          "Connection": "keep-alive",
+          "Content-Length": "311",
+          "Content-Type": "application/json",
+          "User-Agent": "submitter/0.0.0"
+        },
+        "method": "GET",
+        "uri": "http://dockerdev:9000/checkcontent"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"https://github.com/org/repo/three\":false,\"https://github.com/org/repo/one\":false,\"https://github.com/org/repo/two\":false}"
+        },
+        "headers": {
+          "Access-Control-Allow-Headers": "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Api-Version, Response-Time",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Api-Version, Request-Id, Response-Time",
+          "Connection": "Keep-Alive",
+          "Content-Length": "123",
+          "Content-MD5": "BrVTWsLPOySSHWojQd7rXA==",
+          "Content-Type": "application/json",
+          "Date": "Fri, 22 Apr 2016 14:45:10 GMT",
+          "Request-Id": "5bab516d-3935-4217-a0e0-80b32e91ca44",
+          "Response-Time": "2",
+          "Server": "content-service"
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "http://dockerdev:9000/checkcontent"
+      }
+    },
+    {
+      "recorded_at": "2016-04-22T14:45:10",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "\u001f\ufffd\b\u0000\ufffd8\u001aW\u0002\ufffd\ufffd]k\ufffd0\u0014\ufffd\ufffdS\ufffd\ufffd\ufffdf\ufffdbIV\ufffdP\n+e\ufffd\ufffd\u074da$\ufffd\ufffd\ufffdM,c)\ufffdQ\ufffd\u07e7d\ufffd\u000e\ufffd#\ufffd\ufffd\u059e\u0007aY6\u0208\ufffd\u7576\u0010\u036d\ufffd\ufffd9\u07d6M5\ufffd\u000b\ufffd\ufffd\ufffd0\ufffd\ufffd\ufffd\ufffd\ufffd'\ufffd}z\ufffd=\ufffd\u001f\ufffdgb\ufffd\ufffd\ufffd,f\u0013\ufffd\u000b\ufffd\ufffd\ufffd\"\u007f_\ufffd\u007f\ufffd\u0003M\ufffd\ufffd\ufffd\ufffd\ufffd7\ufffd&\u0000]\u0013Z\ufffd\u06055cU\u0013\ub75d;\ufffde\ufffd\ufffdX\u000f\ufffdg\ufffdq\ufffd\ufffd&\ufffd\ufffd\ufffd\ufffd\u0007\ufffdF\ufffd\ufffd\u000f\ufffd\ufffd\ufffd\ufffd\u007f\ufffd\ufffd%\ufffd?\ufffd\ufffd\ufffd\ufffd'\ufffd\ufffd~C\ufffd\ufffd \u01f0\ufffd\u0010\u001f/\ufffd\ufffd\u051e\"?\rR\ufffd\ufffd!\ufffd\u000f\ufffd\u0016\ufffdN\ufffd\ufffd\ufffd\ufffd<\u001f\ufffd\ufffd\u0304@\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffdtM/\ufffd\ufffd/u\u0013Hj\ufffd\u05a4\ufffd\u001e\ufffd\u0005bZbB\ufffdHXQl\ufffd3\ufffd\ufffd8,\nf\ufffd\ufffd\u0000\ufffd.\ufffd\ufffd\\\ufffdJ\ufffd\ufffdLjS\ufffdR\ufffd\ufffd\u05aa\ufffd\ufffdK\ufffd4 3\ufffdJj\ufffd\ufffdtF\ufffd\\\ufffd\ufffd.W9\ufffd\ufffd<\ufffd\ufffdu\ufffd%\ufffd\ufffd{\u001a\ufffd\ufffdI\ufffd\u000f\ufffd\ufffd\ufffdg\ufffd\u007f\ufffd\ufffdX\ufffdpn\u0002<\ufffdP'\ufffdK\ufffd\ufffd\ufffd\ufffd\ufffdO5\u001e\ufffdt\ufffd\u000b\u0010H\ufffd\ufffd\u0004\ufffd\ufffd\ufffds\ufffd\ufffd}\ufffd`\ufffd.\u01ff\u0018\ufffd\ufffd\u001c\ufffd\ufffd~\ufffd\ufffd_Hu\ufffd\ufffd+<\ufffdO\ufffd\ufffd\u0793\u0684Q\ufffd\ufffd\ufffd\ufffd[k\ufffd~\ufffd\ufffd)\u007f&J\u0018*\ufffd\ufffd(<\ufffd \b\ufffd \b\ufffd \b\ufffd \b\ufffd o\ufffd\u001f\ufffd\ufffd\ufffd\ufffd\u0000(\u0000\u0000"
+        },
+        "headers": {
+          "Accept": "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Authorization": "deconst <APIKEY>",
+          "Connection": "keep-alive",
+          "Content-Length": "448",
+          "Content-Type": "application/tar+gzip",
+          "User-Agent": "submitter/0.0.0"
+        },
+        "method": "POST",
+        "uri": "http://dockerdev:9000/bulkcontent"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"accepted\":3,\"failed\":0,\"deleted\":0}"
+        },
+        "headers": {
+          "Access-Control-Allow-Headers": "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Api-Version, Response-Time",
+          "Access-Control-Allow-Methods": "POST",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Api-Version, Request-Id, Response-Time",
+          "Connection": "Keep-Alive",
+          "Content-Length": "37",
+          "Content-MD5": "OOqtp1/dh09xLr1Pz93Hfg==",
+          "Content-Type": "application/json",
+          "Date": "Fri, 22 Apr 2016 14:45:10 GMT",
+          "Request-Id": "4204567f-71c4-4699-adbf-0bf2d77bd0a5",
+          "Response-Time": "17",
+          "Server": "content-service"
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "http://dockerdev:9000/bulkcontent"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.6.0"
+}
