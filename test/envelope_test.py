@@ -5,7 +5,7 @@ import io
 from nose.tools import assert_equal, assert_not_in
 
 from submitter.asset import Asset, AssetSet
-from submitter.envelope import Envelope
+from submitter.envelope import Envelope, EnvelopeSet
 
 class TestEnvelope():
 
@@ -75,3 +75,20 @@ class TestEnvelope():
 
         # echo -n '{"body":"<p>The asset URL is https://assets.horse/one-111.jpg</p>","title":"another asset envelope"}' | shasum -a 256
         assert_equal(e.fingerprint(), 'a0e0c4043590530b1d911432c04fc4d238c614b60eeaa9b68632d0791ba96aec')
+
+class TestEnvelopeSet():
+
+    def test_append(self):
+        envelope_set = EnvelopeSet()
+
+        e0 = Envelope('https://g.com/a/b/one.json', io.StringIO(
+            '{"title": "one", "body": "one"}'
+        ))
+        envelope_set.append(e0)
+        assert_equal(len(envelope_set), 1)
+
+        e1 = Envelope('https://g.com/a/b/two.json', io.StringIO(
+            '{"title": "two", "body": "two"}'
+        ))
+        envelope_set.append(e1)
+        assert_equal(len(envelope_set), 2)

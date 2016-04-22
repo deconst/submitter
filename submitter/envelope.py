@@ -67,3 +67,18 @@ class Envelope():
 
         stable = json.dumps(self.document, separators=(',', ':'), sort_keys=True)
         return hashlib.sha256(stable.encode('utf-8')).hexdigest()
+
+
+class EnvelopeSet():
+    """
+    Collection of all metadata Envelopes discovered from disk.
+    """
+
+    def __init__(self):
+        self.envelopes = []
+
+    def append(self, envelope):
+        self.envelopes.append(envelope)
+
+    def __len__(self):
+        return len(self.envelopes)
