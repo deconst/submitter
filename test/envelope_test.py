@@ -2,7 +2,7 @@
 
 import io
 
-from nose.tools import assert_equal, assert_not_in
+from nose.tools import assert_equal, assert_not_in, assert_true, assert_false
 
 from submitter.asset import Asset, AssetSet
 from submitter.envelope import Envelope, EnvelopeSet
@@ -75,6 +75,18 @@ class TestEnvelope():
 
         # echo -n '{"body":"<p>The asset URL is https://assets.horse/one-111.jpg</p>","title":"another asset envelope"}' | shasum -a 256
         assert_equal(e.fingerprint(), 'a0e0c4043590530b1d911432c04fc4d238c614b60eeaa9b68632d0791ba96aec')
+
+    def test_accept_presence(self):
+        data = io.StringIO('{"title": "a", "body":"a"}')
+        e = Envelope('https%3A%2F%2Fgithub.com%2Forg%2Frepo%2Fpage.json', data)
+        assert_true(e.needs_upload())
+
+        e.accept_presence({ 'https://github.com/org/repo/page': False })
+        assert_true(e.needs_upload())
+
+        e.accept_presence({ 'https://github.com/org/repo/page': True })
+        assert_false(e.needs_upload())
+
 
 class TestEnvelopeSet():
 

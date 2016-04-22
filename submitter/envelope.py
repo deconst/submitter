@@ -16,6 +16,10 @@ class Envelope():
         self.upload_needed = True
 
     def needs_upload(self):
+        """
+        Implemented as a method for consistency with Asset.
+        """
+
         return self.upload_needed
 
     def encoded_content_id(self):
@@ -59,6 +63,13 @@ class Envelope():
 
         self.document['body'] = processed
         del self.document['asset_offsets']
+
+    def accept_presence(self, response):
+        """
+        Accept this Envelope's result from a content check call.
+        """
+
+        self.upload_needed = not response[self.content_id()]
 
     def fingerprint(self):
         """
