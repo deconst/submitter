@@ -27,11 +27,15 @@ def submit(config, session=None):
         session=session
     )
 
-    asset_result = submit_assets(config.asset_dir, content_service)
+    asset_result = submit_assets(
+        config.asset_dir,
+        config.asset_batch_size,
+        content_service
+    )
     envelope_result = submit_envelopes(
-        config,
         config.envelope_dir,
         asset_result.asset_set,
+        config.content_id_base,
         content_service
     )
 
@@ -45,7 +49,7 @@ def submit(config, session=None):
     return SubmitResult(asset_result, envelope_result, state)
 
 
-def submit_assets(directory, content_service):
+def submit_assets(directory, batch_size, content_service):
     """
     Recursively discover each asset file beneath "directory". Check the
     content service API to determine which assets need to be uploaded.
@@ -87,10 +91,11 @@ def submit_assets(directory, content_service):
     return AssetSubmitResult(
         asset_set=asset_set,
         uploaded=uploaded,
-        present=len(asset_set) - uploaded
+        present=len(asset_set) - uploaded,
+        batches=0
     )
 
-def submit_envelopes(config, directory, asset_set, content_service):
+def submit_envelopes(directory, asset_set, content_id_base, content_service):
     """
     Enumerate metadata envelopes within "directory". Inject asset public URLs
     into each, then compute a fingerprint based on a stable representation
@@ -127,7 +132,7 @@ def submit_envelopes(config, directory, asset_set, content_service):
     tf = tarfile.open(fileobj=envelope_archive, mode='w:gz')
 
     # Metadata entry: metadata/config.json
-    config = { 'contentIDBase': config.content_id_base }
+    config = { 'contentIDBase': content_id_base }
     config_data = json.dumps(config).encode('utf-8')
     config_entry = tarfile.TarInfo('metadata/config.json')
     config_entry.size = len(config_data)
@@ -165,10 +170,11 @@ def submit_envelopes(config, directory, asset_set, content_service):
 
 class AssetSubmitResult():
 
-    def __init__(self, asset_set, uploaded, present):
+    def __init__(self, asset_set, uploaded, present, batches):
         self.asset_set = asset_set
         self.uploaded = uploaded
         self.present = present
+        self.batches = batches
 
 
 class EnvelopeSubmitResult():

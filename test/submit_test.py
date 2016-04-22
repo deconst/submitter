@@ -32,7 +32,7 @@ class TestSubmit():
 
     def test_submit_assets(self):
         with self.betamax.use_cassette('test_submit_assets'):
-            result = submit_assets('test/fixtures/assets', self.cs)
+            result = submit_assets('test/fixtures/assets', 10000, self.cs)
 
             assert_equal(result.uploaded, 2)
             assert_equal(result.present, 0)
@@ -63,7 +63,12 @@ class TestSubmit():
                 'bar/bbb.gif': '/__local_asset__/bbb-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gif'
             })
 
-            result = submit_envelopes(CONFIG, 'test/fixtures/envelopes', asset_set, self.cs)
+            result = submit_envelopes(
+                'test/fixtures/envelopes',
+                asset_set,
+                'https://github.com/org/repo/',
+                self.cs
+            )
 
             assert_equal(result.uploaded, 3)
             assert_equal(result.present, 0)
