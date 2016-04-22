@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import logging
+from datetime import datetime
+
 from requests import Session
 
 class ContentService():
@@ -30,11 +33,15 @@ class ContentService():
         https://github.com/deconst/content-service#get-checkassets
         """
 
+        logging.debug('Beginning /checkassets request.')
+        start = datetime.utcnow()
         u = self.base_url + '/checkassets'
         r = self.session.get(u, json=query, headers={
             'Content-Type': 'application/json'
         })
         r.raise_for_status()
+        finish = datetime.utcnow()
+        logging.debug('Completed /checkassets request in {}.', finish - start)
         return r.json()
 
     def bulkasset(self, tarball):
@@ -45,11 +52,15 @@ class ContentService():
         https://github.com/deconst/content-service#post-bulkasset
         """
 
+        logging.debug('Beginning /bulkasset request.')
+        start = datetime.utcnow()
         u = self.base_url + '/bulkasset'
         r = self.session.post(u, data=tarball, headers={
             'Content-Type': 'application/tar+gzip'
         })
         r.raise_for_status()
+        finish = datetime.utcnow()
+        logging.debug('Completed /bulkasset request in {}.', finish - start)
         return r.json()
 
     def checkcontent(self, query):
@@ -60,11 +71,15 @@ class ContentService():
         https://github.com/deconst/content-service#get-checkcontent
         """
 
+        logging.debug('Beginning /checkcontent request.')
+        start = datetime.utcnow()
         u = self.base_url + '/checkcontent'
         r = self.session.get(u, json=query, headers={
             'Content-Type': 'application/json'
         })
         r.raise_for_status()
+        finish = datetime.utcnow()
+        logging.debug('Completed /bulkasset request in {}.', finish - start)
         return r.json()
 
     def bulkcontent(self, tarball):
@@ -75,9 +90,13 @@ class ContentService():
         https://github.com/deconst/content-service#post-bulkcontent
         """
 
+        logging.debug('Beginning /bulkcontent request.')
+        start = datetime.utcnow()
         u = self.base_url + '/bulkcontent'
         r = self.session.post(u, data=tarball, headers={
             'Content-Type': 'application/tar+gzip'
         })
         r.raise_for_status()
+        finish = datetime.utcnow()
+        logging.debug('Completed /bulkasset request in {}.', finish - start)
         return r.json()
