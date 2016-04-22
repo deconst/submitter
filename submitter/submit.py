@@ -4,6 +4,8 @@ import io
 import json
 import os
 import tarfile
+import logging
+from datetime import datetime
 from os.path import join, relpath
 
 from .asset import Asset, AssetSet
@@ -53,6 +55,8 @@ def submit_assets(directory, content_service):
 
     asset_set = AssetSet()
 
+    logging.debug('Discovering and fingerprinting asset files within [{}].'.format(directory))
+    ts = datetime.utcnow()
     for root, dirs, files in os.walk(directory):
         for fname in files:
             fullpath = join(root, fname)
@@ -60,10 +64,13 @@ def submit_assets(directory, content_service):
             with open(fullpath, 'rb') as af:
                 asset = Asset(localpath, af)
                 asset_set.append(asset)
+    logging.debug('Discovered {} asset files in {}.'.format(len(asset_set), datetime.utcnow() - ts))
 
     check_result = content_service.checkassets(asset_set.fingerprint_query())
     asset_set.accept_urls(check_result)
 
+    logging.debug('Creating asset tarball.')
+    ts = datetime.utcnow()
     asset_archive = io.BytesIO()
     tf = tarfile.open(fileobj=asset_archive, mode='w:gz')
     uploaded = 0
@@ -72,6 +79,7 @@ def submit_assets(directory, content_service):
         tf.add(fullpath, arcname=asset.localpath)
         uploaded += 1
     tf.close()
+    logging.debug('Created tarball containing {} assets in {}.'.format(uploaded, datetime.utcnow() - ts))
 
     upload_result = content_service.bulkasset(asset_archive.getvalue())
     asset_set.accept_urls(upload_result)
@@ -94,6 +102,8 @@ def submit_envelopes(config, directory, asset_set, content_service):
 
     envelope_set = EnvelopeSet()
 
+    logging.debug('Discovering and parsing envelopes within {}.'.format(directory))
+    ts = datetime.utcnow()
     for entry in os.scandir(directory):
         if entry.is_dir():
             # TODO Output a warning
@@ -105,12 +115,14 @@ def submit_envelopes(config, directory, asset_set, content_service):
         with open(entry.path, 'r') as ef:
             envelope = Envelope(entry.path, ef)
             envelope_set.append(envelope)
+    logging.debug('Discovered {} envelopes in {}.'.format(len(envelope_set), datetime.utcnow() - ts))
 
     envelope_set.apply_asset_offsets(asset_set)
 
     check_response = content_service.checkcontent(envelope_set.fingerprint_query())
     envelope_set.accept_presence(check_response)
 
+    logging.debug('Creating envelope tarball.')
     envelope_archive = io.BytesIO()
     tf = tarfile.open(fileobj=envelope_archive, mode='w:gz')
 
@@ -138,6 +150,7 @@ def submit_envelopes(config, directory, asset_set, content_service):
         tf.addfile(envelope_entry, io.BytesIO(envelope_buffer))
 
     tf.close()
+    logging.debug('Created tarball containing {} envelopes in {}.'.format(uploaded, datetime.utcnow() - ts))
 
     upload_response = content_service.bulkcontent(envelope_archive.getvalue())
 
