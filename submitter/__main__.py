@@ -7,7 +7,7 @@ import sys
 from datetime import datetime
 
 from .config import Config
-from .submit import submit
+from .submit import submit, SUCCESS, NOOP
 
 c = Config(os.environ)
 
@@ -40,4 +40,12 @@ summary = pattern.format(
 )
 logging.info(summary)
 
-sys.exit(1)
+if result.state is SUCCESS:
+    sys.exit(0)
+elif result.state is NOOP:
+    # Signal to the Strider plugin that we did nothing.
+    sys.exit(2)
+else:
+    # FAILURE
+    logging.error('Failed to upload {} envelopes.'.format(result.envelope_result.failed))
+    sys.exit(1)
