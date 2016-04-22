@@ -41,7 +41,7 @@ class ContentService():
         })
         r.raise_for_status()
         finish = datetime.utcnow()
-        logging.debug('Completed /checkassets request in {}.', finish - start)
+        logging.debug('Completed /checkassets request in {}.'.format(finish - start))
         return r.json()
 
     def bulkasset(self, tarball):
@@ -60,7 +60,7 @@ class ContentService():
         })
         r.raise_for_status()
         finish = datetime.utcnow()
-        logging.debug('Completed /bulkasset request in {}.', finish - start)
+        logging.debug('Completed /bulkasset request in {}.'.format(finish - start))
         return r.json()
 
     def checkcontent(self, query):
@@ -79,7 +79,7 @@ class ContentService():
         })
         r.raise_for_status()
         finish = datetime.utcnow()
-        logging.debug('Completed /bulkasset request in {}.', finish - start)
+        logging.debug('Completed /bulkasset request in {}.'.format(finish - start))
         return r.json()
 
     def bulkcontent(self, tarball):
@@ -98,5 +98,5 @@ class ContentService():
         })
         r.raise_for_status()
         finish = datetime.utcnow()
-        logging.debug('Completed /bulkasset request in {}.', finish - start)
+        logging.debug('Completed /bulkasset request in {}.'.format(finish - start))
         return r.json()
