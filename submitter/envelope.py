@@ -76,8 +76,10 @@ class Envelope():
         Compute the SHA256 checksum of a stable representation of this envelope.
         """
 
-        stable = json.dumps(self.document, separators=(',', ':'), sort_keys=True)
-        return hashlib.sha256(stable.encode('utf-8')).hexdigest()
+        return hashlib.sha256(self.serialize().encode('utf-8')).hexdigest()
+
+    def serialize(self):
+        return json.dumps(self.document, separators=(',', ':'), sort_keys=True)
 
     def __repr__(self):
         return '{}(fname={},document={},upload_needed={})'.format(
