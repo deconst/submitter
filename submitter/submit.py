@@ -55,7 +55,7 @@ def submit_assets(directory, content_service):
 
     asset_set = AssetSet()
 
-    logging.debug('Discovering and fingerprinting asset files within [{}].'.format(directory))
+    logging.debug('Discovering and fingerprinting asset files within {}.'.format(directory))
     ts = datetime.utcnow()
     for root, dirs, files in os.walk(directory):
         for fname in files:
