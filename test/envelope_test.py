@@ -2,7 +2,8 @@
 
 import io
 
-from nose.tools import assert_equal, assert_not_in, assert_true, assert_false
+from nose.tools import assert_equal, assert_in, assert_not_in, \
+    assert_true, assert_false
 
 from submitter.asset import Asset, AssetSet
 from submitter.envelope import Envelope, EnvelopeSet
@@ -125,3 +126,23 @@ class TestEnvelopeSet():
 
         assert_false(self.e0.needs_upload())
         assert_true(self.e1.needs_upload())
+
+    def test_to_upload(self):
+        self.envelope_set.accept_presence({
+            'https://g.com/a/b/one': True,
+            'https://g.com/a/b/two': False
+        })
+
+        to_upload = [e for e in self.envelope_set.to_upload()]
+        assert_not_in(self.e0, to_upload)
+        assert_in(self.e1, to_upload)
+
+    def test_to_keep(self):
+        self.envelope_set.accept_presence({
+            'https://g.com/a/b/one': True,
+            'https://g.com/a/b/two': False
+        })
+
+        to_keep = [e for e in self.envelope_set.to_keep()]
+        assert_in(self.e0, to_keep)
+        assert_not_in(self.e1, to_keep)

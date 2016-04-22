@@ -110,5 +110,25 @@ class EnvelopeSet():
         for envelope in self.all():
             envelope.accept_presence(response)
 
+    def to_upload(self):
+        """
+        Generate the set of Envelopes that have changed and need to be uploaded
+        to the content service.
+        """
+
+        for envelope in self.all():
+            if envelope.needs_upload():
+                yield envelope
+
+    def to_keep(self):
+        """
+        Generate the set of Envelopes that are already present on the content
+        service, but still exist and should not be deleted.
+        """
+
+        for envelope in self.all():
+            if not envelope.needs_upload():
+                yield envelope
+
     def __len__(self):
         return len(self.envelopes)
