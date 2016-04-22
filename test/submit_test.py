@@ -83,3 +83,16 @@ class TestSubmit():
             assert_is_not_none(one)
             assert_is_not_none(two)
             assert_is_not_none(three)
+
+    def test_submit_success(self):
+        # Record this one with an empty content service.
+        with self.betamax.use_cassette('test_submit_success'):
+            result = submit(CONFIG, self.session)
+
+            assert_equal(result.asset_result.uploaded, 2)
+            assert_equal(result.asset_result.present, 0)
+            assert_equal(result.envelope_result.uploaded, 3)
+            assert_equal(result.envelope_result.present, 0)
+            assert_equal(result.envelope_result.deleted, 0)
+            assert_equal(result.envelope_result.failed, 0)
+            assert_equal(result.state, SUCCESS)

@@ -25,8 +25,22 @@ def submit(config, session=None):
         session=session
     )
 
-    asset_set = submit_assets(config.asset_dir, content_service)
-    submit_envelopes(config, config.envelope_dir, asset_set, content_service)
+    asset_result = submit_assets(config.asset_dir, content_service)
+    envelope_result = submit_envelopes(
+        config,
+        config.envelope_dir,
+        asset_result.asset_set,
+        content_service
+    )
+
+    if envelope_result.failed != 0:
+        state = FAILURE
+    elif envelope_result.uploaded == 0:
+        state = NOOP
+    else:
+        state = SUCCESS
+
+    return SubmitResult(asset_result, envelope_result, state)
 
 
 def submit_assets(directory, content_service):
@@ -152,3 +166,10 @@ class EnvelopeSubmitResult():
         self.present = present
         self.deleted = deleted
         self.failed = failed
+
+class SubmitResult():
+
+    def __init__(self, asset_result, envelope_result, state):
+        self.asset_result = asset_result
+        self.envelope_result = envelope_result
+        self.state = state
