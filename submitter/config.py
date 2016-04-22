@@ -13,7 +13,7 @@ class Config:
         self.content_id_base = env.get('CONTENT_ID_BASE')
         self.verbose = env.get('VERBOSE') is not None
 
-        if self.content_service_url.endswith('/'):
+        if self.content_service_url and self.content_service_url.endswith('/'):
             self.content_service_url = self.content_service_url[:-1]
 
         if self.content_id_base and not self.content_id_base.endswith('/'):
