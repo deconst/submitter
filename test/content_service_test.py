@@ -58,3 +58,29 @@ class TestContentService():
                 'bar/bbb.gif': '/__local_asset__/bbb-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gif',
                 'foo/aaa.jpg': '/__local_asset__/aaa-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.jpg'
             })
+
+    def test_checkcontent(self):
+        # curl -X PUT -H "Authorization: deconst ${APIKEY}" \
+        #   -H 'Content-Type: application/json' \
+        #   http://dockerdev:9000/content/https%3A%2F%2Fgithub.com%2Forg%2Frepo%2Fone \
+        #   -d '{"title":"one","body":"one"}'
+
+        # echo -n '{"body":"one","title":"one"}' | shasum -a 256
+
+        # curl -X PUT -H "Authorization: deconst ${APIKEY}" \
+        #   -H 'Content-Type: application/json' \
+        #   http://dockerdev:9000/content/https%3A%2F%2Fgithub.com%2Forg%2Frepo%2Ftwo \
+        #   -d '{"title":"two","body":"two"}'
+
+        # echo -n '{"body":"two","title":"two"}' | shasum -a 256
+
+        with self.betamax.use_cassette('checkcontent'):
+            response = self.cs.checkcontent({
+                'https://github.com/org/repo/one': '842d36ad29589a39fc4be06157c5c204a360f98981fc905c0b2a114662172bd8',
+                'https://github.com/org/repo/two': 'f0e62392fc00c71ba3118c91b97c6f2cbfdcd75e8053fe2d9f029ebfcf6c23fe'
+            })
+
+            assert_equal(response, {
+                'https://github.com/org/repo/one': True,
+                'https://github.com/org/repo/two': False
+            })

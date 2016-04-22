@@ -51,3 +51,18 @@ class ContentService():
         })
         r.raise_for_status()
         return r.json()
+
+    def checkcontent(self, query):
+        """
+        Query the content service with a map of content IDs and the SHA256
+        checksums of their corresponding metadata envelopes.
+
+        https://github.com/deconst/content-service#get-checkcontent
+        """
+
+        u = self.base_url + '/checkcontent'
+        r = self.session.get(u, json=query, headers={
+            'Content-Type': 'application/json'
+        })
+        r.raise_for_status()
+        return r.json()
