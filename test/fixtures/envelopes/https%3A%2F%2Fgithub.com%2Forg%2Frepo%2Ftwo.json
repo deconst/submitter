@@ -1,0 +1,8 @@
+{
+  "title": "two",
+  "body": "<p>Two has X two X assets</p>",
+  "asset_offsets": {
+    "foo/aaa.jpg": [11],
+    "bar/bbb.gif": [17]
+  }
+}
