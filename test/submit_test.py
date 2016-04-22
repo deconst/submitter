@@ -11,7 +11,7 @@ from submitter.config import Config
 from submitter.asset import AssetSet, Asset
 from submitter.content_service import ContentService
 from submitter.submit import submit, submit_assets, submit_envelopes, \
-    SUCCESS
+    SUCCESS, NOOP
 
 CONFIG = Config({
     'ENVELOPE_DIR': 'test/fixtures/envelopes/',
@@ -96,3 +96,16 @@ class TestSubmit():
             assert_equal(result.envelope_result.deleted, 0)
             assert_equal(result.envelope_result.failed, 0)
             assert_equal(result.state, SUCCESS)
+
+    def test_submit_noop(self):
+        # Record this one with an empty content service.
+        with self.betamax.use_cassette('test_submit_noop'):
+            result = submit(CONFIG, self.session)
+
+            assert_equal(result.asset_result.uploaded, 0)
+            assert_equal(result.asset_result.present, 2)
+            assert_equal(result.envelope_result.uploaded, 0)
+            assert_equal(result.envelope_result.present, 3)
+            assert_equal(result.envelope_result.deleted, 0)
+            assert_equal(result.envelope_result.failed, 0)
+            assert_equal(result.state, NOOP)
