@@ -8,6 +8,26 @@ from os.path import join, relpath
 
 from .asset import Asset, AssetSet
 from .envelope import Envelope, EnvelopeSet
+from .content_service import ContentService
+
+SUCCESS = 'success'
+NOOP = 'noop'
+FAILURE = 'failure'
+
+def submit(config, session=None):
+    """
+    Discover and upload assets, then discover, process, and upload envelopes.
+    """
+
+    content_service = ContentService(
+        url=config.content_service_url,
+        apikey=config.content_service_apikey,
+        session=session
+    )
+
+    asset_set = submit_assets(config.asset_dir, content_service)
+    submit_envelopes(config, config.envelope_dir, asset_set, content_service)
+
 
 def submit_assets(directory, content_service):
     """
@@ -32,15 +52,21 @@ def submit_assets(directory, content_service):
 
     asset_archive = io.BytesIO()
     tf = tarfile.open(fileobj=asset_archive, mode='w:gz')
+    uploaded = 0
     for asset in asset_set.to_upload():
         fullpath = join(directory, asset.localpath)
         tf.add(fullpath, arcname=asset.localpath)
+        uploaded += 1
     tf.close()
 
     upload_result = content_service.bulkasset(asset_archive.getvalue())
     asset_set.accept_urls(upload_result)
 
-    return asset_set
+    return AssetSubmitResult(
+        asset_set=asset_set,
+        uploaded=uploaded,
+        present=len(asset_set) - uploaded
+    )
 
 def submit_envelopes(config, directory, asset_set, content_service):
     """
@@ -89,6 +115,7 @@ def submit_envelopes(config, directory, asset_set, content_service):
     tf.addfile(keep_entry, io.BytesIO(keep_data))
 
     # Uploaded envelopes themselves
+    uploaded = 0
     for envelope in envelope_set.to_upload():
         envelope_path = relpath(envelope.fname, directory)
         envelope_entry = tarfile.TarInfo(envelope_path)
@@ -99,8 +126,29 @@ def submit_envelopes(config, directory, asset_set, content_service):
     tf.close()
 
     upload_response = content_service.bulkcontent(envelope_archive.getvalue())
-    failed = upload_response['failed']
-    if failed > 0:
-        raise Exception('Failed to upload {} envelopes.'.format(failed))
 
-    return envelope_set
+    return EnvelopeSubmitResult(
+        envelope_set=envelope_set,
+        uploaded=upload_response['accepted'],
+        present=len(keep['keep']),
+        deleted=upload_response['deleted'],
+        failed=upload_response['failed']
+    )
+
+
+class AssetSubmitResult():
+
+    def __init__(self, asset_set, uploaded, present):
+        self.asset_set = asset_set
+        self.uploaded = uploaded
+        self.present = present
+
+
+class EnvelopeSubmitResult():
+
+    def __init__(self, envelope_set, uploaded, present, deleted, failed):
+        self.envelope_set = envelope_set
+        self.uploaded = uploaded
+        self.present = present
+        self.deleted = deleted
+        self.failed = failed

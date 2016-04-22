@@ -10,21 +10,35 @@ from . import URL, APIKEY
 from submitter.config import Config
 from submitter.asset import AssetSet, Asset
 from submitter.content_service import ContentService
-from submitter.submit import submit_assets, submit_envelopes
+from submitter.submit import submit, submit_assets, submit_envelopes, \
+    SUCCESS
+
+CONFIG = Config({
+    'ENVELOPE_DIR': 'test/fixtures/envelopes/',
+    'ASSET_DIR': 'test/fixtures/assets/',
+    'CONTENT_SERVICE_URL': URL,
+    'CONTENT_SERVICE_APIKEY': APIKEY,
+    'CONTENT_ID_BASE': 'https://github.com/org/repo/'
+})
 
 class TestSubmit():
 
     def setup(self):
-        session = Session()
-        self.betamax = Betamax(session)
-        self.cs = ContentService(url=URL, apikey=APIKEY, session=session)
+        self.session = Session()
+        self.betamax = Betamax(self.session)
+        self.cs = ContentService(url=URL, apikey=APIKEY, session=self.session)
+
+        assert_true(CONFIG.is_valid())
 
     def test_submit_assets(self):
         with self.betamax.use_cassette('test_submit_assets'):
-            asset_set = submit_assets('test/fixtures/assets', self.cs)
+            result = submit_assets('test/fixtures/assets', self.cs)
+
+            assert_equal(result.uploaded, 2)
+            assert_equal(result.present, 0)
 
             aaa, bbb = None, None
-            for asset in asset_set.all():
+            for asset in result.asset_set.all():
                 if asset.localpath == 'foo/aaa.jpg':
                     aaa = asset
                 elif asset.localpath == 'bar/bbb.gif':
@@ -40,15 +54,6 @@ class TestSubmit():
 
     def test_submit_envelopes(self):
         with self.betamax.use_cassette('test_submit_envelopes'):
-            config = Config({
-                'ENVELOPE_DIR': 'test/fixtures/envelopes/',
-                'ASSET_DIR': 'test/fixtures/assets/',
-                'CONTENT_SERVICE_URL': URL,
-                'CONTENT_SERVICE_APIKEY': APIKEY,
-                'CONTENT_ID_BASE': 'https://github.com/org/repo/'
-            })
-            assert_true(config.is_valid())
-
             asset_set = AssetSet()
             asset_set.append(Asset('foo/aaa.jpg', io.BytesIO()))
             asset_set.append(Asset('bar/bbb.gif', io.BytesIO()))
@@ -58,10 +63,14 @@ class TestSubmit():
                 'bar/bbb.gif': '/__local_asset__/bbb-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gif'
             })
 
-            envelope_set = submit_envelopes(config, 'test/fixtures/envelopes', asset_set, self.cs)
+            result = submit_envelopes(CONFIG, 'test/fixtures/envelopes', asset_set, self.cs)
+
+            assert_equal(result.uploaded, 3)
+            assert_equal(result.present, 0)
+            assert_equal(result.failed, 0)
 
             one, two, three = None, None, None
-            for envelope in envelope_set.all():
+            for envelope in result.envelope_set.all():
                 if envelope.content_id() == 'https://github.com/org/repo/one':
                     one = envelope
                 elif envelope.content_id() == 'https://github.com/org/repo/two':
