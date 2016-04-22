@@ -6,11 +6,17 @@ class Config:
     """
 
     def __init__(self, env):
+        self.problems = []
+
         self.envelope_dir = env.get('ENVELOPE_DIR')
         self.asset_dir = env.get('ASSET_DIR')
         self.content_service_url = env.get('CONTENT_SERVICE_URL')
         self.content_service_apikey = env.get('CONTENT_SERVICE_APIKEY')
         self.content_id_base = env.get('CONTENT_ID_BASE')
+        try:
+            self.asset_batch_size = int(env.get('ASSET_BATCH_SIZE', '30000000'))
+        except ValueError:
+            self.problems.append('ASSET_BATCH_SIZE must be an integer')
         self.verbose = env.get('VERBOSE') is not None
 
         if self.content_service_url and self.content_service_url.endswith('/'):
@@ -34,4 +40,4 @@ class Config:
         return m
 
     def is_valid(self):
-        return not self.missing()
+        return not self.missing() and not self.problems
