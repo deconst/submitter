@@ -91,5 +91,17 @@ class EnvelopeSet():
     def append(self, envelope):
         self.envelopes.append(envelope)
 
+    def all(self):
+        """
+        Yield each Envelope.
+        """
+
+        for e in self.envelopes:
+            yield e
+
+    def accept_presence(self, response):
+        for envelope in self.all():
+            envelope.accept_presence(response)
+
     def __len__(self):
         return len(self.envelopes)

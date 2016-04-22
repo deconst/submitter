@@ -92,10 +92,10 @@ class TestEnvelopeSet():
 
     def setup(self):
         self.envelope_set = EnvelopeSet()
-        self.e0 = Envelope('https://g.com/a/b/one.json', io.StringIO(
+        self.e0 = Envelope('https%3A%2F%2Fg.com%2Fa%2Fb%2Fone.json', io.StringIO(
             '{"title": "one", "body": "one"}'
         ))
-        self.e1 = Envelope('https://g.com/a/b/two.json', io.StringIO(
+        self.e1 = Envelope('https%3A%2F%2Fg.com%2Fa%2Fb%2Ftwo.json', io.StringIO(
             '{"title": "two", "body": "two"}'
         ))
 
@@ -110,3 +110,12 @@ class TestEnvelopeSet():
 
         self.envelope_set.append(self.e1)
         assert_equal(len(self.envelope_set), 2)
+
+    def test_accept_presence(self):
+        self.envelope_set.accept_presence({
+            'https://g.com/a/b/one': True,
+            'https://g.com/a/b/two': False
+        })
+
+        assert_false(self.e0.needs_upload())
+        assert_true(self.e1.needs_upload())
