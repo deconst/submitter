@@ -127,6 +127,14 @@ class EnvelopeSet():
 
         return {e.content_id(): e.fingerprint() for e in self.all()}
 
+    def apply_asset_offsets(self, asset_set):
+        """
+        Process asset_offsets entries in all known envelopes.
+        """
+
+        for envelope in self.all():
+            envelope.apply_asset_offsets(asset_set)
+
     def accept_presence(self, response):
         for envelope in self.all():
             envelope.accept_presence(response)
