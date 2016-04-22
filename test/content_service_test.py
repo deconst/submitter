@@ -41,15 +41,8 @@ class TestContentService():
         with self.betamax.use_cassette('bulkasset'):
             tarball = io.BytesIO()
             tf = tarfile.open(fileobj=tarball, mode='w:gz')
-
-            entry0 = tarfile.TarInfo('bar/bbb.gif')
-            entry0.size = 0
-            tf.addfile(entry0, io.BytesIO())
-
-            entry1 = tarfile.TarInfo('foo/aaa.jpg')
-            entry1.size = 0
-            tf.addfile(entry1, io.BytesIO())
-
+            add_tar_entry(tf, 'bar/bbb.gif')
+            add_tar_entry(tf, 'foo/aaa.jpg')
             tf.close()
 
             response = self.cs.bulkasset(tarball.getvalue())
@@ -84,3 +77,34 @@ class TestContentService():
                 'https://github.com/org/repo/one': True,
                 'https://github.com/org/repo/two': False
             })
+
+    def test_bulkcontent(self):
+        with self.betamax.use_cassette('bulkcontent'):
+            tarball = io.BytesIO()
+            tf = tarfile.open(fileobj=tarball, mode='w:gz')
+            add_tar_entry(
+                tf,
+                'https%3A%2F%2Fgithub.com%2Forg%2Frepo%2Fone.json',
+                b'{"body":"one","title":"one"}')
+            add_tar_entry(
+                tf,
+                'https%3A%2F%2Fgithub.com%2Forg%2Frepo%2Ftwo.json',
+                b'{"body":"two","title":"two"}')
+            tf.close()
+
+            response = self.cs.bulkcontent(tarball.getvalue())
+
+            assert_equal(response, {
+                'accepted': 2,
+                'failed': 0,
+                'deleted': 0
+            })
+
+def add_tar_entry(tf, entryname, buf = b''):
+    """
+    Add a manually constructed TarInfo to a TarFile.
+    """
+
+    entry = tarfile.TarInfo(entryname)
+    entry.size = len(buf)
+    tf.addfile(entry, io.BytesIO(buf))
