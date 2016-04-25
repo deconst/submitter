@@ -167,6 +167,7 @@ def submit_envelopes(directory, asset_set, content_id_base, content_service):
         envelope_buffer = envelope.serialize().encode('utf-8')
         envelope_entry.size = len(envelope_buffer)
         tf.addfile(envelope_entry, io.BytesIO(envelope_buffer))
+        uploaded += 1
 
     tf.close()
     logging.debug('Created tarball containing {} envelopes in {}.'.format(uploaded, datetime.utcnow() - ts))
