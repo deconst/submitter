@@ -73,26 +73,40 @@ def submit_assets(directory, batch_size, content_service):
     check_result = content_service.checkassets(asset_set.fingerprint_query())
     asset_set.accept_urls(check_result)
 
-    logging.debug('Creating asset tarball.')
-    ts = datetime.utcnow()
-    asset_archive = io.BytesIO()
-    tf = tarfile.open(fileobj=asset_archive, mode='w:gz')
-    uploaded = 0
-    for asset in asset_set.to_upload():
-        fullpath = join(directory, asset.localpath)
-        tf.add(fullpath, arcname=asset.localpath)
-        uploaded += 1
-    tf.close()
-    logging.debug('Created tarball containing {} assets in {}.'.format(uploaded, datetime.utcnow() - ts))
+    uploaded, batches = 0, 0
+    while not asset_set.all_public():
+        batches += 1
 
-    upload_result = content_service.bulkasset(asset_archive.getvalue())
-    asset_set.accept_urls(upload_result)
+        logging.debug('Creating asset tarball for batch {}.'.format(batches))
+        ts = datetime.utcnow()
+        asset_archive = io.BytesIO()
+        tf = tarfile.open(fileobj=asset_archive, mode='w:gz')
+        for asset in asset_set.to_upload():
+            fullpath = join(directory, asset.localpath)
+            entry = tf.gettarinfo(fullpath, arcname=asset.localpath)
+
+            with open(fullpath, 'rb') as af:
+                tf.addfile(entry, fileobj=af)
+            uploaded += 1
+
+            if tf.offset > batch_size:
+                break
+        tf.close()
+        logging.debug('Created {}-byte tarball containing {} assets for batch {} in {}.'.format(
+            tf.offset,
+            uploaded,
+            batches,
+            datetime.utcnow() - ts
+        ))
+
+        upload_result = content_service.bulkasset(asset_archive.getvalue())
+        asset_set.accept_urls(upload_result)
 
     return AssetSubmitResult(
         asset_set=asset_set,
         uploaded=uploaded,
         present=len(asset_set) - uploaded,
-        batches=0
+        batches=batches
     )
 
 def submit_envelopes(directory, asset_set, content_id_base, content_service):

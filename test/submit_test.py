@@ -52,6 +52,14 @@ class TestSubmit():
             assert_equal(aaa.public_url, '/__local_asset__/aaa-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.jpg')
             assert_equal(bbb.public_url, '/__local_asset__/bbb-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gif')
 
+    def test_submit_assets_batches(self):
+        with self.betamax.use_cassette('test_submit_assets_batches'):
+            result = submit_assets('test/fixtures/batched_assets', 25000, self.cs)
+
+            assert_equal(result.uploaded, 4)
+            assert_equal(result.batches, 2)
+            assert_equal(result.present, 0)
+
     def test_submit_envelopes(self):
         with self.betamax.use_cassette('test_submit_envelopes'):
             asset_set = AssetSet()
