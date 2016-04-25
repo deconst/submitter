@@ -10,6 +10,7 @@ def test_valid_config():
         'CONTENT_SERVICE_URL': 'http://localhost:9000',
         'CONTENT_SERVICE_APIKEY': '12341234',
         'CONTENT_ID_BASE': 'https://github.com/org/repo/',
+        'ASSET_BATCH_SIZE': '40000000',
         'VERBOSE': 'true'
     })
 
@@ -18,6 +19,7 @@ def test_valid_config():
     assert_equal(c.content_service_url, 'http://localhost:9000')
     assert_equal(c.content_service_apikey, '12341234')
     assert_equal(c.content_id_base, 'https://github.com/org/repo/')
+    assert_equal(c.asset_batch_size, 40000000)
     assert_true(c.verbose)
 
     assert_true(c.is_valid())
@@ -67,3 +69,16 @@ def test_verbose_defaults_to_false():
     })
 
     assert_false(c.verbose)
+
+def test_invalid_batch_size():
+    c = Config({
+        'ENVELOPE_DIR': '/envelopes/',
+        'ASSET_DIR': '/assets/',
+        'CONTENT_SERVICE_APIKEY': '12341234',
+        'CONTENT_SERVICE_URL': 'http://localhost:9000',
+        'CONTENT_ID_BASE': 'https://github.com/org/repo',
+        'ASSET_BATCH_SIZE': 'not an integer'
+    })
+
+    assert_false(c.is_valid())
+    assert_in('ASSET_BATCH_SIZE must be an integer', c.problems)

@@ -19,3 +19,4 @@ These environment variables must all be specified.
 These are optional.
 
 * `VERBOSE` Set to a non-empty value to enable debugging output. *default: false*
+* `ASSET_BATCH_SIZE` Suggested archive size, in bytes, to be uploaded to the content service in a single transaction. *default: 30MB*

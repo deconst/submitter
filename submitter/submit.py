@@ -27,11 +27,15 @@ def submit(config, session=None):
         session=session
     )
 
-    asset_result = submit_assets(config.asset_dir, content_service)
+    asset_result = submit_assets(
+        config.asset_dir,
+        config.asset_batch_size,
+        content_service
+    )
     envelope_result = submit_envelopes(
-        config,
         config.envelope_dir,
         asset_result.asset_set,
+        config.content_id_base,
         content_service
     )
 
@@ -45,7 +49,7 @@ def submit(config, session=None):
     return SubmitResult(asset_result, envelope_result, state)
 
 
-def submit_assets(directory, content_service):
+def submit_assets(directory, batch_size, content_service):
     """
     Recursively discover each asset file beneath "directory". Check the
     content service API to determine which assets need to be uploaded.
@@ -69,28 +73,43 @@ def submit_assets(directory, content_service):
     check_result = content_service.checkassets(asset_set.fingerprint_query())
     asset_set.accept_urls(check_result)
 
-    logging.debug('Creating asset tarball.')
-    ts = datetime.utcnow()
-    asset_archive = io.BytesIO()
-    tf = tarfile.open(fileobj=asset_archive, mode='w:gz')
-    uploaded = 0
-    for asset in asset_set.to_upload():
-        fullpath = join(directory, asset.localpath)
-        tf.add(fullpath, arcname=asset.localpath)
-        uploaded += 1
-    tf.close()
-    logging.debug('Created tarball containing {} assets in {}.'.format(uploaded, datetime.utcnow() - ts))
+    uploaded, batches = 0, 0
+    while not asset_set.all_public():
+        batches += 1
 
-    upload_result = content_service.bulkasset(asset_archive.getvalue())
-    asset_set.accept_urls(upload_result)
+        logging.debug('Creating asset tarball for batch {}.'.format(batches))
+        ts = datetime.utcnow()
+        asset_archive = io.BytesIO()
+        tf = tarfile.open(fileobj=asset_archive, mode='w:gz')
+        for asset in asset_set.to_upload():
+            fullpath = join(directory, asset.localpath)
+            entry = tf.gettarinfo(fullpath, arcname=asset.localpath)
+
+            with open(fullpath, 'rb') as af:
+                tf.addfile(entry, fileobj=af)
+            uploaded += 1
+
+            if tf.offset > batch_size:
+                break
+        tf.close()
+        logging.debug('Created {}-byte tarball containing {} assets for batch {} in {}.'.format(
+            tf.offset,
+            uploaded,
+            batches,
+            datetime.utcnow() - ts
+        ))
+
+        upload_result = content_service.bulkasset(asset_archive.getvalue())
+        asset_set.accept_urls(upload_result)
 
     return AssetSubmitResult(
         asset_set=asset_set,
         uploaded=uploaded,
-        present=len(asset_set) - uploaded
+        present=len(asset_set) - uploaded,
+        batches=batches
     )
 
-def submit_envelopes(config, directory, asset_set, content_service):
+def submit_envelopes(directory, asset_set, content_id_base, content_service):
     """
     Enumerate metadata envelopes within "directory". Inject asset public URLs
     into each, then compute a fingerprint based on a stable representation
@@ -127,7 +146,7 @@ def submit_envelopes(config, directory, asset_set, content_service):
     tf = tarfile.open(fileobj=envelope_archive, mode='w:gz')
 
     # Metadata entry: metadata/config.json
-    config = { 'contentIDBase': config.content_id_base }
+    config = { 'contentIDBase': content_id_base }
     config_data = json.dumps(config).encode('utf-8')
     config_entry = tarfile.TarInfo('metadata/config.json')
     config_entry.size = len(config_data)
@@ -165,10 +184,11 @@ def submit_envelopes(config, directory, asset_set, content_service):
 
 class AssetSubmitResult():
 
-    def __init__(self, asset_set, uploaded, present):
+    def __init__(self, asset_set, uploaded, present, batches):
         self.asset_set = asset_set
         self.uploaded = uploaded
         self.present = present
+        self.batches = batches
 
 
 class EnvelopeSubmitResult():
