@@ -79,7 +79,7 @@ class Envelope():
         return hashlib.sha256(self.serialize().encode('utf-8')).hexdigest()
 
     def serialize(self):
-        return json.dumps(self.document, separators=(',', ':'), sort_keys=True)
+        return json.dumps(self.document, separators=(',', ':'), sort_keys=True, ensure_ascii=False)
 
     def __repr__(self):
         return '{}(fname={},document={},upload_needed={})'.format(
