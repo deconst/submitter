@@ -86,6 +86,13 @@ def submit_assets(directory, batch_size, content_service):
 
             with open(fullpath, 'rb') as af:
                 tf.addfile(entry, fileobj=af)
+
+            if uploaded < 10:
+                logging.debug('  {}'.format(asset.localpath))
+
+            if uploaded == 10:
+                logging.debug('  ...')
+
             uploaded += 1
 
             if tf.offset > batch_size:
@@ -166,6 +173,14 @@ def submit_envelopes(directory, asset_set, content_id_base, content_service):
         envelope_buffer = envelope.serialize().encode('utf-8')
         envelope_entry.size = len(envelope_buffer)
         tf.addfile(envelope_entry, io.BytesIO(envelope_buffer))
+
+        # Log the first ten envelopes.
+        if uploaded < 10:
+            logging.debug('  {}'.format(envelope.content_id()))
+
+        if uploaded == 10:
+            logging.debug('  ...')
+
         uploaded += 1
 
     tf.close()
