@@ -11,11 +11,43 @@ from .submit import submit, SUCCESS, NOOP
 
 c = Config(os.environ)
 
+# Configure the logger.
+# <= INFO to stdout
+# >= WARNING to stderr
+
+class LessThanFilter(logging.Filter):
+    def __init__(self, exclusive_maximum):
+        super().__init__('')
+        self.exclusive_maximum = exclusive_maximum
+
+    def filter(self, record):
+        if record.levelno < self.exclusive_maximum:
+            return 1
+        else:
+            return 0
+
 if c.verbose:
     level=logging.DEBUG
 else:
     level=logging.INFO
-logging.basicConfig(format='%(message)s', level=level)
+
+rootLogger = logging.getLogger()
+rootLogger.setLevel(level)
+
+plainFormatter = logging.Formatter('%(message)s')
+
+outHandler = logging.StreamHandler(sys.stdout)
+outHandler.setLevel(logging.DEBUG)
+outHandler.addFilter(LessThanFilter(logging.WARNING))
+outHandler.setFormatter(plainFormatter)
+rootLogger.addHandler(outHandler)
+
+errHandler = logging.StreamHandler(sys.stderr)
+errHandler.setLevel(logging.WARNING)
+errHandler.setFormatter(plainFormatter)
+rootLogger.addHandler(errHandler)
+
+# Squelch requests and urllib messages.
 logging.getLogger("requests").setLevel(logging.WARNING)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 

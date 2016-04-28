@@ -17,7 +17,7 @@ class Config:
             self.asset_batch_size = int(env.get('ASSET_BATCH_SIZE', '30000000'))
         except ValueError:
             self.problems.append('ASSET_BATCH_SIZE must be an integer')
-        self.verbose = env.get('VERBOSE') is not None
+        self.verbose = env.get('VERBOSE', '') != ''
 
         if self.content_service_url and self.content_service_url.endswith('/'):
             self.content_service_url = self.content_service_url[:-1]
