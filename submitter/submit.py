@@ -60,7 +60,6 @@ def submit_assets(directory, batch_size, content_service):
     asset_set = AssetSet()
 
     logging.debug('Discovering and fingerprinting asset files within {}.'.format(directory))
-    ts = datetime.utcnow()
     for root, dirs, files in os.walk(directory):
         for fname in files:
             fullpath = join(root, fname)
@@ -68,7 +67,7 @@ def submit_assets(directory, batch_size, content_service):
             with open(fullpath, 'rb') as af:
                 asset = Asset(localpath, af)
                 asset_set.append(asset)
-    logging.debug('Discovered {} asset files in {}.'.format(len(asset_set), datetime.utcnow() - ts))
+    logging.info('Discovered {} asset files.'.format(len(asset_set)))
 
     check_result = content_service.checkassets(asset_set.fingerprint_query())
     asset_set.accept_urls(check_result)
@@ -122,7 +121,6 @@ def submit_envelopes(directory, asset_set, content_id_base, content_service):
     envelope_set = EnvelopeSet()
 
     logging.debug('Discovering and parsing envelopes within {}.'.format(directory))
-    ts = datetime.utcnow()
     for entry in os.scandir(directory):
         if entry.is_dir():
             # TODO Output a warning
@@ -134,7 +132,7 @@ def submit_envelopes(directory, asset_set, content_id_base, content_service):
         with open(entry.path, 'r') as ef:
             envelope = Envelope(entry.path, ef)
             envelope_set.append(envelope)
-    logging.debug('Discovered {} envelopes in {}.'.format(len(envelope_set), datetime.utcnow() - ts))
+    logging.info('Discovered {} envelopes.'.format(len(envelope_set)))
 
     envelope_set.apply_asset_offsets(asset_set)
 
@@ -142,6 +140,7 @@ def submit_envelopes(directory, asset_set, content_id_base, content_service):
     envelope_set.accept_presence(check_response)
 
     logging.debug('Creating envelope tarball.')
+    ts = datetime.utcnow()
     envelope_archive = io.BytesIO()
     tf = tarfile.open(fileobj=envelope_archive, mode='w:gz')
 
