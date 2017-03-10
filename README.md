@@ -6,6 +6,21 @@
 
 Submit prepared JSON documents to the content service.
 
+## Running locally
+
+To run the submitter locally, you'll need to install:
+
+ * [Docker](https://docs.docker.com/installation/#installation) for your platform.
+ * [jq](https://stedolan.github.io/jq/download/) for your platform.
+
+Once you have Docker set up, export any desired configuration variables below and run `deconst-submitter.sh`.
+
+```bash
+./deconst-submitter.sh
+```
+
+This script is easiest to run within a content repo as then you only need to set `CONTENT_SERVICE_APIKEY` and `CONTENT_SERVICE_URL`.
+
 ### Configuration
 
 These environment variables must all be specified.
