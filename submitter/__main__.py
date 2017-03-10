@@ -52,9 +52,11 @@ logging.getLogger("requests").setLevel(logging.WARNING)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 if not c.is_valid():
-    logging.error('Invalid configuration. Missing the following environment variables:')
+    logging.error('Invalid configuration. Fix the following environment variables:')
     for var in c.missing():
         logging.error("  " + var)
+    for problem in c.problems:
+        logging.error("  " + problem)
     sys.exit(1)
 
 start = datetime.utcnow()
