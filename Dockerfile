@@ -1,5 +1,5 @@
 FROM alpine:3.7
-MAINTAINER Laura Santamaria <laura.santamaria@rackspace.com>
+LABEL maintainer="Laura Santamaria <laura.santamaria@rackspace.com>"
 
 RUN apk add --no-cache python3
 RUN python3 -m ensurepip
