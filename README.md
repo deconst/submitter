@@ -1,4 +1,6 @@
-# Submitter
+# DEPRECATED. Use https://gitlab.com/deconst-next/submitter
+
+## Submitter
 
 .jpg / .css / .json :point_right: content service
 
